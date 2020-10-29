@@ -10,18 +10,39 @@
 showStats(tempValues());
 
 function showStats(data) {
-    let maleCount = 0, femaleCount = 0;
+    const stats = {};
+    stats.allCount = data.length;
+    stats.maleCount = 0; stats.femaleCount = 0;
+    stats.lessonsChangeNotice = 0; stats.dayLessonsNotice = 0;
+
     for (let person of data) {
-        if (person.sex === 2) maleCount++;
-        else if (person.sex === 1) femaleCount++;
+        if (person.sex === 2) stats.maleCount++;
+        else if (person.sex === 1) stats.femaleCount++;
+
+        if (person.schChangeNotice) stats.lessonsChangeNotice++;
+        if (person.sendDaySchedule) stats.dayLessonsNotice++;
+
+
     }
 
-    let malePercent = Math.round(maleCount / (maleCount + femaleCount) * 100);
-    console.log(maleCount, femaleCount, malePercent);
-    $('#maleCounter').css('width', malePercent+'%').text(malePercent+'%');
-    $('#femaleCounter').css('width', 100-malePercent+'%').text(100-malePercent+'%');
+    // Количество девушек, парней, всего
+    stats.malePercent = Math.round(stats.maleCount / (stats.maleCount + stats.femaleCount) * 100);
+    stats.femalePercent = 100 - stats.malePercent;
+    $('#malePercent').css('width', stats.malePercent+'%').text(stats.malePercent+'%');
+    $('#femalePercent').css('width', stats.femalePercent+'%').text(stats.femalePercent+'%');
+    $('#allCounter').text(stats.allCount);
+    // Конец Количество девушек, парней, всего
 
-    $('#allCounter').text(data.length);
+
+    // Количество уведомления
+
+
+    stats.lessonsChangeNoticeP = Math.round(stats.lessonsChangeNotice / (stats.lessonsChangeNotice + stats.dayLessonsNotice) * 100);
+    stats.dayLessonsNoticeP = 100 - stats.lessonsChangeNotice;
+
+    $('#lessonsChangeNotice').text('Уведомления об изменении' + stats.lessonsChangeNotice +' (' + stats.lessonsChangeNoticeP +'%)');
+    $('#dayLessonsNotice').text(stats.dayLessonsNotice);
+    // Конец Количество уведомления
 }
 
 
