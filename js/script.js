@@ -1,12 +1,10 @@
-// $.ajax({
-//     type: 'GET',
-//     url: 'https://mitso-bot-schedule.herokuapp.com/users',
-//     success: function (msg) {
-//         showStats(msg);
-//     }
-// });
-
-setTimeout(()=> {showStats(tempValues())}, 500);
+$.ajax({
+    type: 'GET',
+    url: 'https://mitso-bot-schedule.herokuapp.com/users',
+    success: function (msg) {
+        showStats(msg);
+    }
+});
 
 function showStats(data) {
     const stats = {};
@@ -39,8 +37,6 @@ function showStats(data) {
         if (person.group1 && person.group2) stats.usingTwoGroups ++;
         else if (person.group1 || person.group2) stats.usingOneGroup++;
 
-        // --------
-        // person.myGroupString = 'МЭОиМ, Дневная, 3 курс, 1820 ИСиТ'
         if (person.myGroupString) {
             let fakultet = person.myGroupString.split(', ')[0];
             let year = person.myGroupString.split(', ')[2];
@@ -52,49 +48,62 @@ function showStats(data) {
             else if (year === '2 курс') stats.yearTwo++;
             else if (year === '3 курс') stats.yearThree++;
             else if (year === '4 курс') stats.yearFour++;
-        } else {
-            console.log(person);
         }
-
     }
 
+
+
     // Количество девушек, парней, всего
-    stats.maleContP = Math.round(stats.maleCount / (stats.maleCount + stats.femaleCount) * 100);
-    stats.femaleCountP = 100 - stats.maleContP;
-    $('#malePercent').css('width', stats.maleContP+'%').text(stats.maleContP+'%');
-    $('#femalePercent').css('width', stats.femaleCountP+'%').text(stats.femaleCountP+'%');
-    $('#allCounter').text(stats.allCount);
+    stats.maleCountP = Math.round(stats.maleCount / (stats.maleCount + stats.femaleCount) * 100);
+    stats.femaleCountP = 100 - stats.maleCountP;
+    $('#malePercent').css('width', stats.maleCountP+'%').text(stats.maleCount+' ('+stats.maleCountP+'%)');
+    $('#femalePercent').css('width', stats.femaleCountP+'%').text(stats.femaleCount+' ('+stats.femaleCountP+'%)');
     // Конец Количество девушек, парней, всего
 
+    // Количество всего
+    $('#allCounter').text(stats.allCount);
+    // Конец Количество всего
+
+    // Количество по факультетам
+    $('#ekFakultet').html('Экономический - <b>' + stats.ekFakultet + ' ('+getPercent(stats.ekFakultet)+'%)</b>');
+    $('#urFakultet').html('Юридический - <b>' + stats.urFakultet + ' ('+getPercent(stats.urFakultet)+'%)</b>');
+    $('#magistratura').html('Магистратура - <b>' + stats.magistratura + ' ('+getPercent(stats.magistratura)+'%)</b>');
+    // Конец Количество по факультетам
+
+    // Количество по курсам
+    let max = 100 - getPercent(Math.max(stats.yearOne, stats.yearTwo, stats.yearThree, stats.yearFour));
+    $('#yearOne').text('1 курс - ' + stats.yearOne + ' ('+getPercent(stats.yearOne)+'%)').css('width', getPercent(stats.yearOne)+max+'%');
+    $('#yearTwo').text('2 курс - ' + stats.yearTwo + ' ('+getPercent(stats.yearTwo)+'%)').css('width', getPercent(stats.yearTwo)+max+'%');
+    $('#yearThree').text('3 курс - ' + stats.yearThree + ' ('+getPercent(stats.yearThree)+'%)').css('width', getPercent(stats.yearThree)+max+'%');
+    $('#yearFour').text('4 курс - ' + stats.yearFour + ' ('+getPercent(stats.yearFour)+'%)').css('width', getPercent(stats.yearFour)+max+'%');
+    // Конец Количество по курсам
 
     // Количество включенных уведомлений
     stats.lessonsChangeNoticeP = Math.round(stats.lessonsChangeNotice / stats.allCount * 100);
     stats.dayLessonsNoticeP = Math.round(stats.dayLessonsNotice / stats.allCount * 100);
-    $('#lessonsChangeNotice').text('Уведомления об изменении занятий - ' + stats.lessonsChangeNotice +' (' + stats.lessonsChangeNoticeP +'%)');
-    $('#dayLessonsNotice').text('Уведомления с расписанием на день - ' + stats.dayLessonsNotice + ' (' + stats.dayLessonsNoticeP + '%)');
+    stats.balanceChangeNoticeP = Math.round(stats.balanceChangeNotice / stats.allCount * 100);
+    $('#lessonsChangeNotice').html('Уведомления об изменении занятий<br><b>' + stats.lessonsChangeNotice +' (' + stats.lessonsChangeNoticeP +'%)</b>');
+    $('#dayLessonsNotice').html('Уведомления с расписанием на день<br><b>' + stats.dayLessonsNotice + ' (' + stats.dayLessonsNoticeP + '%)</b>');
+    $('#balanceChangeNotice').html('Уведомления об изменении баланса<br><b>' + stats.balanceChangeNotice + ' (' + stats.balanceChangeNoticeP + '%)</b>');
     // Конец Количество включенных уведомлений
 
+    // Количество использует баланс
+    stats.usingBalanceP = Math.round(stats.usingBalance / stats.allCount * 100);
+    $('#usingBalance').html('Пользуется балансом<br><b>' + stats.usingBalance + ' (' + stats.usingBalanceP + '%)</b>');
+    // Конец Количество использует баланс
+
+    // Количество использует группы
     stats.usingOneGroupP = Math.round(stats.usingOneGroup / stats.allCount * 100);
     stats.usingTwoGroupsP = Math.round(stats.usingTwoGroups / stats.allCount * 100);
-    $('#usingOneGroup').text('Используют хотя бы одну дополнительную группу - ' + stats.usingOneGroup + ' (' + stats.usingOneGroupP + '%)');
-    $('#usingTwoGroups').text('Используют две дополнительные группы - ' + stats.usingTwoGroups + ' (' + stats.usingTwoGroupsP + '%)');
+    $('#usingOneGroup').html('Используют хотя бы одну дополнительную группу<br><b>' + stats.usingOneGroup + ' (' + stats.usingOneGroupP + '%)</b>');
+    $('#usingTwoGroups').html('Используют две дополнительные группы<br><b>' + stats.usingTwoGroups + ' (' + stats.usingTwoGroupsP + '%)</b>');
+    // Конец Количество использует группы
 
 
-    stats.usingBalanceP = Math.round(stats.usingBalance / stats.allCount * 100);
-    $('#usingBalance').text('Пользуется балансом - ' + stats.usingBalance + ' (' + stats.usingBalanceP + '%)');
-    stats.balanceChangeNoticeP = Math.round(stats.balanceChangeNotice / stats.allCount * 100);
-    $('#balanceChangeNotice').text('Уведомления об изменении баланса - ' + stats.balanceChangeNotice + ' (' + stats.balanceChangeNoticeP + '%)');
 
-
-    $('#ekFakultet').text('Экономический факультет - ' + stats.ekFakultet);
-    $('#urFakultet').text('Юридический факультет - ' + stats.urFakultet);
-    $('#magistratura').text('Магистратура - ' + stats.magistratura);
-
-
-    $('#yearOne').text('1 курс - ' + stats.yearOne);
-    $('#yearTwo').text('2 курс - ' + stats.yearTwo);
-    $('#yearThree').text('3 курс - ' + stats.yearThree);
-    $('#yearFour').text('4 курс - ' + stats.yearFour);
+    function getPercent(n, all = stats.allCount) {
+        return Math.round(n / all * 100);
+    }
 }
 
 

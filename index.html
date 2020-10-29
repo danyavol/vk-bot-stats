@@ -12,18 +12,18 @@
 
         <h2 class="text-center pb-4">Статистика бота с расписанием</h2>
 
-        <div class="row pb-4">
+        <div class="row mb-2 mb-sm-3">
             <div class="col">
                 <!-- Male/Female -->
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between pb-2">
                             <p class="h6">Парней</p>
                             <p class="h6">Девушек</p>
                         </div>
                         <div class="progress">
                             <div id="malePercent" class="progress-bar bg-info" role="progressbar" style="width: 0"></div>
-                            <div id="femalePercent" class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
+                            <div id="femalePercent" class="progress-bar bg-danger" role="progressbar" style="width: 0"></div>
                         </div>
                     </div>
                 </div>
@@ -31,43 +31,109 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-center"><i class="fas fa-users fa-5x text-dark"></i></p>
-                        <p id="allCounter" class="text-center display-4 m-0">???</p>
+        <div class="row mb-2  mb-sm-3">
+            <div class="col-sm-5 pr-sm-2 mb-2 mb-sm-0">
+                <!-- Общее количество -->
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column justify-content-center">
+
+                            <p class="h6 text-center mb-2">Всего пользователей</p>
+                            <p id="allCounter" class="text-center h2 font-weight-bolder m-0"></p>
+
                     </div>
                 </div>
+                <!-- End Общее количество -->
             </div>
+            <div class="col-sm-7 pl-sm-2 h-100">
+                <!-- Количество по факультетам -->
+                <div class="card h-100">
+                    <div class="card-body">
+                        <p class="h6 text-center mb-2">Распределение по факультетам</p>
+                        <div id="ekFakultet"></div>
+                        <div id="urFakultet"></div>
+                        <div id="magistratura"></div>
+                    </div>
+                </div>
+                <!-- End Количество по факультетам -->
+            </div>
+        </div>
+
+        <div class="row mb-2  mb-sm-3">
+            <div class="col">
+                <!-- Количество по курсам -->
+                <div class="card">
+                    <div class="card-body">
+                        <p class="h6 text-center pb-2">Распределение по курсам</p>
+                        <div class="progress mb-1">
+                            <div id="yearOne" class="progress-bar bg-primary" role="progressbar" style="width: 0"></div>
+                        </div>
+                        <div class="progress mb-1">
+                            <div id="yearTwo" class="progress-bar bg-success" role="progressbar" style="width: 0"></div>
+                        </div>
+                        <div class="progress mb-1">
+                            <div id="yearThree" class="progress-bar bg-danger" role="progressbar" style="width: 0"></div>
+                        </div>
+                        <div class="progress">
+                            <div id="yearFour" class="progress-bar bg-warning text-dark" role="progressbar" style="width: 0"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Количество по курсам -->
+            </div>
+        </div>
+
+
+
+        <div class="row mb-2 mb-sm-3">
             <div class="col">
                 <div class="card">
                     <div class="card-body">
                         <input type="text" id="questionNumber" oninput="getAnswer()">
-                        <div class="card card-body" id="answers"></div>
+                        <div class="card card-body mt-2" id="answers"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="lessonsChangeNotice"></div>
-        <div id="dayLessonsNotice"></div>
-        <br>
-        <div id="usingOneGroup"></div>
-        <div id="usingTwoGroups"></div>
-        <br>
-        <div id="usingBalance"></div>
-        <div id="balanceChangeNotice"></div>
-        <br>
-        <div id="yearOne"></div>
-        <div id="yearTwo"></div>
-        <div id="yearThree"></div>
-        <div id="yearFour"></div>
-        <br>
-        <div id="ekFakultet"></div>
-        <div id="urFakultet"></div>
-        <div id="magistratura"></div>
 
 
+        <div class="row mb-2 mb-sm-3">
+            <div class="col-sm pr-sm-2 mb-2 mb-sm-0">
+                <div class="card card-body">
+                    <div id="lessonsChangeNotice" class="text-center"></div>
+                </div>
+            </div>
+            <div class="col-sm px-sm-2 mb-2 mb-sm-0">
+                <div class="card card-body">
+                    <div id="dayLessonsNotice" class="text-center"></div>
+                </div>
+            </div>
+            <div class="col-sm pl-sm-2">
+                <div class="card card-body">
+                    <div id="balanceChangeNotice" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2 mb-sm-3">
+            <div class="col">
+                <div class="card card-body">
+                    <div id="usingBalance" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm pr-sm-2 mb-2 mb-sm-0">
+                <div class="card card-body">
+                    <div id="usingOneGroup" class="text-center"></div>
+                </div>
+            </div>
+            <div class="col-sm pl-sm-2 mb-2 mb-sm-0">
+                <div class="card card-body">
+                    <div id="usingTwoGroups" class="text-center"></div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
