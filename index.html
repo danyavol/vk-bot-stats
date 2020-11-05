@@ -14,6 +14,11 @@
                 min-width: 670px;
             }
         }
+        @media (min-width: 577px) {
+            #days {
+                width: 50%;
+            }
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -21,9 +26,9 @@
 
         <h2 class="text-center pb-4" style="font-family: 'Raleway', sans-serif">Статистика бота с расписанием</h2>
 
+        <!-- Количество парней/девушек -->
         <div class="row mb-2 mb-sm-3">
             <div class="col">
-                <!-- Male/Female -->
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between pb-2">
@@ -36,25 +41,22 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Male/Female -->
             </div>
         </div>
+        <!-- Конец Количество парней/девушек -->
 
         <div class="row mb-2  mb-sm-3">
+            <!-- Общее количество -->
             <div class="col-sm-5 pr-sm-2 mb-2 mb-sm-0">
-                <!-- Общее количество -->
                 <div class="card h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
-
                             <p class="h6 text-center mb-3">Всего пользователей</p>
                             <p id="allCounter" class="text-center h2 font-weight-bolder m-0"></p>
-
                     </div>
                 </div>
-                <!-- End Общее количество -->
             </div>
+            <!-- Количество по факультетам -->
             <div class="col-sm-7 pl-sm-2 h-100">
-                <!-- Количество по факультетам -->
                 <div class="card h-100">
                     <div class="card-body">
                         <p class="h6 text-center mb-3">Количество человек по факультетам</p>
@@ -63,13 +65,12 @@
                         <div id="magistratura"></div>
                     </div>
                 </div>
-                <!-- End Количество по факультетам -->
             </div>
         </div>
 
+        <!-- Количество по курсам -->
         <div class="row mb-2  mb-sm-3">
             <div class="col">
-                <!-- Количество по курсам -->
                 <div class="card">
                     <div class="card-body">
                         <p class="h6 text-center mb-3">Количество человек по курсам</p>
@@ -87,24 +88,51 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Количество по курсам -->
+
             </div>
         </div>
+        <!-- Конец Количество по курсам -->
 
+        <!-- Статистика по дням -->
+        <div class="card mb-2  mb-sm-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-center">
+                    <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons" id="days">
+                        <label class="btn btn-warning active"><input type="radio" autocomplete="off" onclick="dayStatistics(1)">1</label>
+                        <label class="btn btn-warning active"><input type="radio" autocomplete="off" onclick="dayStatistics(3)">3</label>
+                        <label class="btn btn-warning active"><input type="radio" autocomplete="off" checked onclick="dayStatistics(7)">7</label>
+                        <label class="btn btn-warning active"><input type="radio" autocomplete="off" onclick="dayStatistics(14)">14</label>
+                        <label class="btn btn-warning active"><input type="radio" autocomplete="off" onclick="dayStatistics(30)">30</label>
+                        <label class="btn btn-info active"><input type="radio" autocomplete="off" onclick="dayStatistics()">Всё время</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="h6 text-center mb-4" id="d"></p>
+                <div class="row">
+                    <div class="col-sm text-center mb-4 mb-sm-0" id="lastUsedAt">
+                    </div>
+                    <div class="col-sm text-center" id="createdAt">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Конец Статистика по дням -->
+
+        <!-- Количество по группам -->
         <div class="row mb-2 mb-sm-3">
             <div class="col">
-                <!-- Количество по группам -->
                 <div class="card">
                     <p class="h6 text-center mb-3" style="padding-top: 20px">Количество человек по группам</p>
                     <div class="card-body pt-0 mx-1 overflow-auto">
-
                             <div class="overflow-auto" id="groups"></div>
-
                     </div>
                 </div>
-                <!-- End Количество по группам -->
+
             </div>
         </div>
+        <!-- Конец Количество по группам -->
+
 
         <div class="row mb-2 mb-sm-3" id="secret" style="display: none">
             <div class="col">
@@ -119,16 +147,19 @@
 
 
         <div class="row mb-2 mb-sm-3">
+            <!-- Уведомления об измененнии занятий -->
             <div class="col-sm pr-sm-2 mb-2 mb-sm-0 secret">
-                <div class="card card-body h-100 d-flex justify-content-center">
+                <div class="card card-body h-100 d-flex justify-content-center" style="cursor: pointer; user-select: none">
                     <div id="lessonsChangeNotice" class="text-center"></div>
                 </div>
             </div>
+            <!-- Уведомления с расписание на день -->
             <div class="col-sm px-sm-2 mb-2 mb-sm-0">
                 <div class="card card-body h-100 d-flex justify-content-center">
                     <div id="dayLessonsNotice" class="text-center"></div>
                 </div>
             </div>
+            <!-- Уведомления об изменении баланса -->
             <div class="col-sm pl-sm-2">
                 <div class="card card-body h-100 d-flex justify-content-center">
                     <div id="balanceChangeNotice" class="text-center"></div>
@@ -136,6 +167,7 @@
             </div>
         </div>
 
+        <!-- Пользуется балансом -->
         <div class="row mb-2 mb-sm-3">
             <div class="col">
                 <div class="card card-body h-100">
@@ -145,17 +177,21 @@
         </div>
 
         <div class="row">
+            <!-- Использует хотя бы одну доп. группу -->
             <div class="col-sm pr-sm-2 mb-2 mb-sm-0">
                 <div class="card card-body h-100 d-flex justify-content-center">
                     <div id="usingOneGroup" class="text-center"></div>
                 </div>
             </div>
+            <!-- Использует две доп. группы -->
             <div class="col-sm pl-sm-2">
                 <div class="card card-body h-100 d-flex justify-content-center">
                     <div id="usingTwoGroups" class="text-center"></div>
                 </div>
             </div>
         </div>
+
+
 
 
     </div>
