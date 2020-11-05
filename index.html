@@ -11,7 +11,7 @@
     <style>
         @media (max-width: 576px) {
             #groups {
-                min-width: 670px;
+                min-width: 500px;
             }
         }
         @media (min-width: 577px) {
@@ -116,6 +116,7 @@
                     </div>
                 </div>
             </div>
+            <p class="text-right text-secondary pr-4" style="font-size: 0.8rem">Подсчет ведется с 05.11.2020</p>
         </div>
         <!-- Конец Статистика по дням -->
 
@@ -127,8 +128,8 @@
                     <div class="card-body pt-0 mx-1 overflow-auto">
                             <div class="overflow-auto" id="groups"></div>
                     </div>
+                    <p class="text-right text-secondary pr-4 pt-1" style="font-size: 0.8rem" id="totalGroups"></p>
                 </div>
-
             </div>
         </div>
         <!-- Конец Количество по группам -->
@@ -138,7 +139,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <input type="text" id="questionNumber" oninput="getAnswer()">
+                        <input type="text" id="questionNumber" oninput="getAnswer()" />
                         <div class="card card-body mt-2" id="answers"></div>
                     </div>
                 </div>

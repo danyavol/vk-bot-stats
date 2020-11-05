@@ -7,11 +7,12 @@ $.ajax({
 });
 let userData;
 function showStats(data) {
-    userData = data;
+    let {users, groups} = data;
+    userData = users;
     dayStatistics(7);
 
     const stats = {};
-    stats.allCount = data.length;
+    stats.allCount = users.length;
     stats.maleCount = 0; stats.femaleCount = 0;
     stats.lessonsChangeNotice = 0; stats.dayLessonsNotice = 0;
 
@@ -29,7 +30,7 @@ function showStats(data) {
 
     stats.groups = [];
 
-    for (let person of data) {
+    for (let person of users) {
         if (person.sex === 2) stats.maleCount++;
         else if (person.sex === 1) stats.femaleCount++;
 
@@ -107,20 +108,45 @@ function showStats(data) {
     // Конец Количество использует группы
 
     // Количество человек по группам
-    stats.groups.sort((a, b) => parseInt(b.name) - parseInt(a.name) );
+    stats.groupsLength = stats.groups.length;
+    for (let group of groups) getGroupInfo(stats.groups, group, true);
+    stats.totalGroupsLength = stats.groups.length;
+
+    stats.groups = sortGroups(stats.groups);
     for (let group of stats.groups) {
-        $('#groups').append("<div class=\"d-flex justify-content-between align-items-center border-bottom mx-2 px-1 py-1\">"
-            + group.name +
-            "<span class=\"badge badge-primary badge-pill\">" + group.count + "</span>" +
-            "</div>");
+        if (group.name) {
+            $('#groups').append("<div class=\"d-flex justify-content-between align-items-center border-bottom mx-2 px-1 py-1\">"
+                + group.name +
+                "<span class=\"badge " + (group.count > 0 ? 'badge-primary' : 'badge-danger') + " badge-pill\">" + group.count + "</span></div>");
+        } else {
+            $('#groups').append("<div class=\"d-flex justify-content-center align-items-center border-bottom font-weight-bold dontend mx-2 px-1 py-1\">"
+                + group.title + "</div>");
+        }
+
     }
-    $('#groups').columnize({ width: 250 });
+    window.addEventListener('resize', (e) => {
+        if (e.target.innerWidth < 576) {
+            // Маленький экран
+            $('#groups').css('width', '').columnize({ width: 208, height: 550, buildOnce: true});
+        } else if (e.target.innerWidth < 992) {
+            // Средний экран
+            $('#groups').css('width', '').columnize({ width: 208, height: 650, buildOnce: true});
+        } else if (e.target.innerWidth < 1200) {
+            // Большой
+            $('#groups').css('width', '').columnize({ width: 215, height: 800, buildOnce: true});
+        } else {
+            // Очень большой
+            $('#groups').css('width', '').columnize({ width: 208, height: 650, buildOnce: true});
+        }
+    });
+    window.dispatchEvent(new Event('resize'));
+    $('#totalGroups').text( stats.groupsLength + ' групп из ' + stats.totalGroupsLength + ' используют бота.');
     // Конец Количество человек по группам
 
-    function getGroupInfo(obj, groupName) {
+    function getGroupInfo(obj, groupName, flag = false) {
         for (let group of obj) {
             if (group.name === groupName) {
-                group.count++;
+                if (!flag) group.count++;
                 return;
             }
         }
@@ -128,8 +154,33 @@ function showStats(data) {
         // Группа не найдена, создаем новую
         obj.push({
             name: groupName,
-            count: 1
+            count: flag ? 0 : 1
         });
+    }
+
+    function sortGroups(groups) {
+        let s = {zaoch:[], zaochSokr:[], magistr:[], other:[]};
+        for (let group of groups) {
+            if ( /\dз\s/.test(group.name) ) {
+                // заочная
+                s.zaoch.push(group); continue;
+            } else if ( /\dзс\s/.test(group.name) ) {
+                // заочная сокращенная
+                s.zaochSokr.push(group); continue;
+            } else if ( /\d[а-я]+\d/.test(group.name) ) {
+                // магистратура
+                s.magistr.push(group); continue;
+            } else {
+                // дневная
+                s.other.push(group); continue;
+            }
+        }
+
+        for (let group in s) {
+            s[group] = s[group].sort((a, b) => parseInt(b.name) - parseInt(a.name));
+        }
+
+        return [{title: 'Дневная'}, ...s.other, {title: 'Заочная'}, ...s.zaoch, {title: 'Заочная сокр.'}, ...s.zaochSokr, {title: 'Магистратура'}, ...s.magistr];
     }
 
 
